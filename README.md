@@ -23,18 +23,27 @@ Este é um Mini ERP que implementa funcionalidades básicas de cadastro de usuá
 A estrutura do projeto segue um padrão de organização de pacotes:
 
 ```bash
+resources/
+├── estoque.txt
+├── logs.txt
+├── users.txt 
+└── vendas.txt
 src/
 ├── model/
+│   ├── Permission.java
 │   ├── Produto.java
-│   ├── Cadastro.java
+│   ├── Role.java
+│   ├── Venda.java
+│   └── Usuario.java
 ├── service/
-│   ├── Vendas.java
+│   ├── Exceptions/
+│   ├── AuthService.java
+│   ├── PermissionService.java
+│   ├── ProdutoService.java
+│   └── VendasService.java
+├── utils/
 │   ├── FileUtil.java
-│   ├── Logger.java
-├── resources/
-│   ├── estoque.txt
-│   └── logs.txt
-│   └── users.txt 
+│   └── Logger.java
 └── Main.java
 
 ```
@@ -70,6 +79,7 @@ java -cp bin com.example.Main
 - **Autenticação de Usuários**: Realiza a verificação de login de usuários cadastrados no sistema.
 - **Cadastro de Produtos**: Permite o cadastro de novos produtos no estoque.
 - **Gestão de Estoque**: Visualização do estoque de produtos, atualização de informações dos produtos e remoção de produtos.
+- **Gestão de Vendas**: Permite realizar vendas e visualizar as vendas realizadas.
 - **Logs de Ações**: Registra ações importantes do sistema como login de usuários, cadastros e modificações no estoque em arquivos de log.
 
 ## Como Funciona o sistema
@@ -77,7 +87,7 @@ java -cp bin com.example.Main
 ### Cadastro de Usuários
 Os usuários são armazenados no arquivo `users.txt`, e o sistema verifica se o nome de usuário e a senha fornecidos são válidos no momento do login. Se a autenticação for bem-sucedida, o usuário tem acesso ao sistema de gerenciamento de produtos.
 
-### Cadastro de Produtos
+### Gestão de Produtos
 Cada produto tem as seguintes informações:
 
 - **Nome**: Nome do produto.
@@ -85,7 +95,10 @@ Cada produto tem as seguintes informações:
 - **Quantidade**: Quantidade disponível em estoque (em Kg).
 - **Preço**: Preço do produto.
 
-Os produtos são armazenados em um array e podem ser gerenciados (adicionados, atualizados ou removidos) durante a execução do programa.
+Os produtos são armazenadas no arquivo estoque.txt e podem ser gerenciados (adicionados, atualizados ou removidos) durante a execução do programa.
+
+### Gestão de Vendas
+O sistema permite que o usuário realize vendas. Para cada venda, o sistema registra a quantidade vendida e o valor apurado. As vendas são armazenadas no arquivo vendas.txt e podem ser visualizadas pelo usuário.
 
 ### Logs de Ações
 O sistema registra todas as ações relevantes, como login de usuário, atualizações no estoque de produtos e erros. Esses logs são gravados no arquivo `logs.txt`.
