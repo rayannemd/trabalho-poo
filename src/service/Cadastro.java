@@ -2,19 +2,24 @@ package service;
 
 import model.Produto;
 import service.exceptions.ProductNotFoundException;
+import utils.FileUtil;
 
-import utils.Logger;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Cadastro {
 
-    private Produto[] produtos;
-    private int contador;
+    private List<Produto> produtos;
 
-    public Cadastro(int capacidade) {
-        produtos = new Produto[capacidade];
-        contador = 0;
+    public Cadastro() {
+        try {
+            this.produtos = FileUtil.loadEstoque(); 
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar o estoque: " + e.getMessage());
+            this.produtos = new ArrayList<>();
+        }
     }
 
     public void cadastrarProduto() {
@@ -33,25 +38,28 @@ public class Cadastro {
         double preco = scanner.nextDouble();
 
         Produto produto = new Produto(nome, descricao, quantidade, preco);
-        produtos[contador] = produto;
-        contador++;
+        produtos.add(produto);
+
+        try {
+            FileUtil.saveEstoque(produtos);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar o produto no estoque: " + e.getMessage());
+        }
 
         if (produto.estoqueBaixo()) {
             System.out.println("ALERTA: O estoque de " + nome + " está abaixo de 10 Kg.");
         }
 
         System.out.println("Produto cadastrado com sucesso!");
-
-        // Log de cadastro
-        Logger.log("Produto cadastrado: " + nome + " - Quantidade: " + quantidade + "kg - Preço: R$ " + preco);
+        System.out.println("------------");
     }
 
     public void mostrarEstoque() {
         System.out.println("Estoque Atual:");
-        for (int i = 0; i < contador; i++) {
-            produtos[i].mostrarInfo();
-            if (produtos[i].estoqueBaixo()) {
-                System.out.println("ALERTA: O estoque de " + produtos[i].getNome() + " está abaixo de 10 Kg.");
+        for (Produto produto : produtos) {
+            produto.mostrarInfo();
+            if (produto.estoqueBaixo()) {
+                System.out.println("ALERTA: O estoque de " + produto.getNome() + " está abaixo de 10 Kg.");
             }
         }
     }
@@ -62,45 +70,48 @@ public class Cadastro {
         String nome = scanner.nextLine();
 
         boolean encontrado = false;
-        for (int i = 0; i < contador; i++) {
-            if (produtos[i].getNome().equalsIgnoreCase(nome)) {
+        for (Produto produto : produtos) {
+            if (produto.getNome().equalsIgnoreCase(nome)) {
                 encontrado = true;
 
                 System.out.println("Produto encontrado! Atualize os dados do produto.");
                 System.out.print("Novo nome (deixe em branco para manter o mesmo): ");
                 String novoNome = scanner.nextLine();
                 if (!novoNome.isEmpty()) {
-                    produtos[i].setNome(novoNome);
+                    produto.setNome(novoNome);
                 }
 
                 System.out.print("Nova descrição (deixe em branco para manter a mesma): ");
                 String novaDescricao = scanner.nextLine();
                 if (!novaDescricao.isEmpty()) {
-                    produtos[i].setDescricao(novaDescricao);
+                    produto.setDescricao(novaDescricao);
                 }
 
                 System.out.print("Nova quantidade: ");
                 int novaQuantidade = scanner.nextInt();
-                produtos[i].setQuantidade(novaQuantidade);
+                produto.setQuantidade(novaQuantidade);
 
                 System.out.print("Novo preço: R$ ");
                 double novoPreco = scanner.nextDouble();
-                produtos[i].setPreco(novoPreco);
+                produto.setPreco(novoPreco);
+
+                try {
+                    FileUtil.saveEstoque(produtos);
+                } catch (IOException e) {
+                    System.out.println("Erro ao salvar o estoque após atualização: " + e.getMessage());
+                }
 
                 System.out.println("Produto atualizado com sucesso!");
 
-                if (produtos[i].estoqueBaixo()) {
-                    System.out.println("ALERTA: O estoque de " + produtos[i].getNome() + " está abaixo de 10 Kg.");
+                if (produto.estoqueBaixo()) {
+                    System.out.println("ALERTA: O estoque de " + produto.getNome() + " está abaixo de 10 Kg.");
                 }
-
-                // Log de atualização
-                Logger.log("Produto atualizado: " + produtos[i].getNome() + " - Nova Quantidade: " + novaQuantidade + "kg - Novo Preço: R$ " + novoPreco);
                 break;
             }
         }
 
         if (!encontrado) {
-            throw new ProductNotFoundException("Produto não encontrado para atualização!");
+            throw new ProductNotFoundException("Produto não encontrado!");
         }
     }
 
@@ -110,25 +121,25 @@ public class Cadastro {
         String nome = scanner.nextLine();
 
         boolean encontrado = false;
-        for (int i = 0; i < contador; i++) {
-            if (produtos[i].getNome().equalsIgnoreCase(nome)) {
+        for (int i = 0; i < produtos.size(); i++) {
+            if (produtos.get(i).getNome().equalsIgnoreCase(nome)) {
                 encontrado = true;
 
-                for (int j = i; j < contador - 1; j++) {
-                    produtos[j] = produtos[j + 1];
+                produtos.remove(i);
+
+                try {
+                    FileUtil.saveEstoque(produtos);
+                } catch (IOException e) {
+                    System.out.println("Erro ao salvar o estoque após remoção: " + e.getMessage());
                 }
-                produtos[contador - 1] = null;
-                contador--;
 
                 System.out.println("Produto removido com sucesso!");
-
-                Logger.log("Produto removido: " + nome);
                 break;
             }
         }
 
         if (!encontrado) {
-            throw new ProductNotFoundException("Produto não encontrado para remoção!");
+            throw new ProductNotFoundException("Produto não encontrado!");
         }
     }
 }

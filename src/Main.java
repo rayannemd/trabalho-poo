@@ -13,8 +13,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        AuthService authService = new AuthService(); 
-        Cadastro cadastro = new Cadastro(10);
+        AuthService authService = new AuthService();
+        Cadastro cadastro = new Cadastro();  
         Scanner scanner = new Scanner(System.in);
 
         // Fluxo de Cadastro de Usuário
@@ -71,7 +71,7 @@ public class Main {
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
             Logger.log("Erro de login: " + e.getMessage());
-            return; // Encerra o programa em caso de falha no login
+            return;
         }
 
         // Fluxo de Cadastro de Produtos (após login bem-sucedido)
@@ -84,18 +84,18 @@ public class Main {
             System.out.println("4 - Remover Produto");
             System.out.println("5 - Sair");
             int option = scanner.nextInt();
-            scanner.nextLine(); // Limpar buffer
+            scanner.nextLine(); 
 
             switch (option) {
                 case 1:
-                    cadastro.cadastrarProduto();
+                    cadastro.cadastrarProduto(); 
                     break;
                 case 2:
-                    cadastro.mostrarEstoque(); 
+                    cadastro.mostrarEstoque();  
                     break;
                 case 3:
                     try {
-                        cadastro.atualizarProduto(); 
+                        cadastro.atualizarProduto();
                     } catch (ProductNotFoundException e) {
                         System.out.println(e.getMessage());
                         Logger.log("Erro ao atualizar produto: " + e.getMessage());
@@ -103,7 +103,7 @@ public class Main {
                     break;
                 case 4:
                     try {
-                        cadastro.removerProduto(); 
+                        cadastro.removerProduto();
                     } catch (ProductNotFoundException e) {
                         System.out.println(e.getMessage());
                         Logger.log("Erro ao remover produto: " + e.getMessage());
