@@ -12,10 +12,11 @@ Este é um Mini ERP que implementa funcionalidades básicas de cadastro de usuá
 
 ## Desafios escolhidos
 
-**2. Utilizar coleções (como listas, mapas e etc.) e algum padrão de projeto durante a implementação do projeto**
+#### **2. Utilizar coleções (como listas, mapas e etc.) e algum padrão de projeto durante a implementação do projeto**
 - Coleções: O projeto utiliza a classe List (especificamente uma ArrayList) para armazenar os usuários e os produtos no sistema. A coleção permite que os dados sejam manipulados dinamicamente, como a adição de novos usuários ou produtos, bem como a remoção de itens.
 - Padrão de Projeto: O projeto utiliza o padrão de design Factory de maneira implícita. Embora não tenha sido formalmente identificado um padrão no código, a separação de responsabilidades e a utilização de diferentes classes (como AuthService, FileUtil, Logger) sugere uma abordagem modular e reutilizável.
-**5. Implementar um sistema de logs para registrar e visualizar todas as ações realizadas no sistema**
+
+#### **5. Implementar um sistema de logs para registrar e visualizar todas as ações realizadas no sistema**
 - O projeto possui um sistema de logs implementado pela classe Logger, que registra ações importantes, como login de usuário, cadastro de produtos e modificações no estoque, em um arquivo de texto (logs.txt). Isso permite que as ações realizadas pelo usuário sejam monitoradas e auditadas ao longo do tempo.
 
 ## Estrutura do Projeto
@@ -62,8 +63,7 @@ java -cp bin com.example.Main
 
 ```
 
-
-## Funcionalidades
+## Funcionalidades implementadas
 - **Cadastro de Usuários**: Permite o cadastro de novos usuários no sistema.
 - **Autenticação de Usuários**: Realiza a verificação de login de usuários cadastrados no sistema.
 - **Cadastro de Produtos**: Permite o cadastro de novos produtos no estoque.
