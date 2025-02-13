@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Cadastro {
+public class ProdutoService {
 
     private List<Produto> produtos;
 
-    public Cadastro() {
+    public ProdutoService() {
         try {
             this.produtos = FileUtil.loadEstoque(); 
         } catch (IOException e) {
@@ -22,6 +22,7 @@ public class Cadastro {
         }
     }
 
+    // Método para cadastrar um novo produto
     public void cadastrarProduto() {
         Scanner scanner = new Scanner(System.in);
 
@@ -38,7 +39,7 @@ public class Cadastro {
         double preco = scanner.nextDouble();
 
         Produto produto = new Produto(nome, descricao, quantidade, preco);
-        produtos.add(produto);
+        produtos.add(produto);  
 
         try {
             FileUtil.saveEstoque(produtos);
@@ -54,16 +55,18 @@ public class Cadastro {
         System.out.println("------------");
     }
 
+    // Método para mostrar todos os produtos no estoque
     public void mostrarEstoque() {
         System.out.println("Estoque Atual:");
         for (Produto produto : produtos) {
-            produto.mostrarInfo();
+            produto.mostrarInfo(); 
             if (produto.estoqueBaixo()) {
                 System.out.println("ALERTA: O estoque de " + produto.getNome() + " está abaixo de 10 Kg.");
             }
         }
     }
 
+    // Método para atualizar as informações de um produto
     public void atualizarProduto() throws ProductNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Digite o nome do produto que você deseja atualizar:");
@@ -75,6 +78,7 @@ public class Cadastro {
                 encontrado = true;
 
                 System.out.println("Produto encontrado! Atualize os dados do produto.");
+
                 System.out.print("Novo nome (deixe em branco para manter o mesmo): ");
                 String novoNome = scanner.nextLine();
                 if (!novoNome.isEmpty()) {
@@ -96,7 +100,7 @@ public class Cadastro {
                 produto.setPreco(novoPreco);
 
                 try {
-                    FileUtil.saveEstoque(produtos);
+                    FileUtil.saveEstoque(produtos);  
                 } catch (IOException e) {
                     System.out.println("Erro ao salvar o estoque após atualização: " + e.getMessage());
                 }
@@ -115,6 +119,7 @@ public class Cadastro {
         }
     }
 
+    // Método para remover um produto do estoque
     public void removerProduto() throws ProductNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Digite o nome do produto que você deseja remover:");
@@ -125,10 +130,10 @@ public class Cadastro {
             if (produtos.get(i).getNome().equalsIgnoreCase(nome)) {
                 encontrado = true;
 
-                produtos.remove(i);
+                produtos.remove(i); 
 
                 try {
-                    FileUtil.saveEstoque(produtos);
+                    FileUtil.saveEstoque(produtos); 
                 } catch (IOException e) {
                     System.out.println("Erro ao salvar o estoque após remoção: " + e.getMessage());
                 }
@@ -141,5 +146,10 @@ public class Cadastro {
         if (!encontrado) {
             throw new ProductNotFoundException("Produto não encontrado!");
         }
+    }
+
+    // Método para obter a lista de produtos
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 }

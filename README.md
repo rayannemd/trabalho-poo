@@ -24,16 +24,18 @@ A estrutura do projeto segue um padrão de organização de pacotes:
 
 ```bash
 src/
-├── main/
-│   ├── java/
-│   │   └── com/
-│   │       └── example/
-│   │           ├── model/            # Modelos de dados (User, Product, etc)
-│   │           ├── service/          # Serviços (Autenticação, Cadastro de Produto)
-│   │           └── utils/            # Utilitários (Logger, FileUtil)
-│   ├── resources/
-│   │   ├── logs.txt                  # Arquivo de logs
-│   │   └── users.txt                 # Arquivo de usuários
+├── model/
+│   ├── Produto.java
+│   ├── Cadastro.java
+├── service/
+│   ├── Vendas.java
+│   ├── FileUtil.java
+│   ├── Logger.java
+├── resources/
+│   ├── estoque.txt
+│   └── logs.txt
+│   └── users.txt 
+└── Main.java
 
 ```
 
